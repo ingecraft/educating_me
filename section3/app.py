@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 stores = [
     {
-        'name': 'My Wondeful Store',
+        'name': 'My Wonderful Store',
         'items': [
             {
                 'name': 'My Item',
@@ -58,7 +58,7 @@ def create_item_in_store(name):
 def get_items_in_store(name):
     for store in stores:
         if store['name'] == name:
-            return jsonfiy(store['item'])
+            return jsonify(store['items'])
     return jsonify({'message': 'store not found'})
 
 app.run(port=5005)
