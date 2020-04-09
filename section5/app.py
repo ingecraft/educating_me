@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = 'bandit'
 api = Api(app)
 
-jwt = JWT(app, authenticate, identity) # /auth
+jwt = JWT(app, authenticate, identity)
 
 items = []
 
