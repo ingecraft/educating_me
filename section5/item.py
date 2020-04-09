@@ -23,6 +23,17 @@ class Item(Resource):
         if row:
             return {'item': {'name': row[0], 'price': row[1]}}
 
+    @classmethod
+    def insert(cls, item):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+
+        query = "INSERT INTO items VALUES(?, ?)"
+        cursor.execute(query, (item['name'], item['price']))
+
+        connection.commit()
+        connection.close()
+
     @jwt_required()
     def get(self, name):
         item = self.find_by_name(name)
@@ -38,31 +49,25 @@ class Item(Resource):
         data = Item.parser.parse_args()
         item = {'name': name, 'price': data['price']}
 
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "INSERT INTO items VALUES(?, ?)"
-        cursor.execute(query, (item['name'], item['price']))
-
-        connection.commit()
-        connection.close()
+        try:
+            self.insert(item)
+        except Exception:
+            return {'message': 'An error occured inserting an item'}, 500
+            # 500 Internal server error
 
         return item, 201
 
     def delete(self, name):
-        if self.find_by_name(name):
-            connection = sqlite3.connect('data.db')
-            cursor = connection.cursor()
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
 
-            query = "DELETE FROM items WHERE name=?"
-            cursor.execute(query, (name,))
+        query = "DELETE FROM items WHERE name=?"
+        cursor.execute(query, (name,))
 
-            connection.commit()
-            connection.close()
+        connection.commit()
+        connection.close()
 
-            return {'message': 'Item deleted'}, 200
-
-        return {'message': 'There is no item with that name'}
+        return {'message': 'Item deleted'}, 200
 
     def put(self, name):
         data = Item.parser.parse_args()
