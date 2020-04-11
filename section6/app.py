@@ -5,10 +5,15 @@ from flask_jwt import JWT
 from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList
+from db import db
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'bandit'
+
 api = Api(app)
+
+db.init_app(app)
 
 jwt = JWT(app, authenticate, identity)
 
