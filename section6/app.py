@@ -13,9 +13,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'bandit'
 
+
 @app.before_first_request
 def create_tables():
     db.create_all()
+
 
 api = Api(app)
 
