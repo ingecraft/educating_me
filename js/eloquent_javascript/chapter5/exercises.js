@@ -29,6 +29,10 @@ function loop(value, test, update, body) {
   if (test(value)){
     body(value);
     loop(update(value), test, update, body);
+  // Official solution
+  // for (let value = start; test(value); value = update(value)) {
+  //   body(value);
+  // } 
   }
 }
 
@@ -36,4 +40,25 @@ loop(3, n => n > 0, n => n - 1, console.log);
 // → 3
 // → 2
 // → 1
+
+console.log('\n--- Exercise 2---\n');
+
+function every(array, test) {
+  for (let element of array) {
+    if (!test(element)) return false;
+  }
+
+  return true;
+}
+
+function every2(array, predicate) {
+  return !array.some(element => !predicate(element));
+}
+
+console.log(every([1, 3, 5], n => n < 10));
+// → true
+console.log(every([2, 4, 16], n => n < 10));
+// → false
+console.log(every([], n => n < 10));
+// → true
 
